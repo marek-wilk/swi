@@ -4,14 +4,14 @@
     "C:\\Users\\Marek\\source\\repos\\swi\\swi\\swi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Marek\\source\\repos\\swi\\swi\\swi.csproj": {
+    "C:\\Users\\Marek\\source\\repos\\swi\\BLL\\BLL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Marek\\source\\repos\\swi\\swi\\swi.csproj",
-        "projectName": "swi",
-        "projectPath": "C:\\Users\\Marek\\source\\repos\\swi\\swi\\swi.csproj",
+        "projectUniqueName": "C:\\Users\\Marek\\source\\repos\\swi\\BLL\\BLL.csproj",
+        "projectName": "BLL",
+        "projectPath": "C:\\Users\\Marek\\source\\repos\\swi\\BLL\\BLL.csproj",
         "packagesPath": "C:\\Users\\Marek\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Marek\\source\\repos\\swi\\swi\\obj\\",
+        "outputPath": "C:\\Users\\Marek\\source\\repos\\swi\\BLL\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -42,6 +42,12 @@
       "frameworks": {
         "netcoreapp3.1": {
           "targetAlias": "netcoreapp3.1",
+          "dependencies": {
+            "CsvHelper": {
+              "target": "Package",
+              "version": "[26.1.0, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -57,7 +63,68 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.103\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\Marek\\source\\repos\\swi\\swi\\swi.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Marek\\source\\repos\\swi\\swi\\swi.csproj",
+        "projectName": "swi",
+        "projectPath": "C:\\Users\\Marek\\source\\repos\\swi\\swi\\swi.csproj",
+        "packagesPath": "C:\\Users\\Marek\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Marek\\source\\repos\\swi\\swi\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Marek\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "targetAlias": "netcoreapp3.1",
+            "projectReferences": {
+              "C:\\Users\\Marek\\source\\repos\\swi\\BLL\\BLL.csproj": {
+                "projectPath": "C:\\Users\\Marek\\source\\repos\\swi\\BLL\\BLL.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
         }
       }
     }

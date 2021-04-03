@@ -1,4 +1,6 @@
 ﻿using System;
+using BLL;
+using CsvHelper.Expressions;
 
 namespace swi
 {
@@ -6,7 +8,14 @@ namespace swi
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var service = new OutputService();
+            //service.SaveToFile(service.ReshapeData());
+            foreach (var record in service.ReshapeData())
+            {
+                Console.WriteLine($"{record}");
+            }
+
+            Console.ReadKey();
         }
     }
 }

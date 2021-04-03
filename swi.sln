@@ -4,6 +4,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.31019.35
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "swi", "swi\swi.csproj", "{833602C6-30F9-4844-ADCF-1118A7C1BE54}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F17F607E-75E4-4B5F-B94B-893FBF8D061A} = {F17F607E-75E4-4B5F-B94B-893FBF8D061A}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BLL", "BLL\BLL.csproj", "{F17F607E-75E4-4B5F-B94B-893FBF8D061A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +20,10 @@ Global
 		{833602C6-30F9-4844-ADCF-1118A7C1BE54}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{833602C6-30F9-4844-ADCF-1118A7C1BE54}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{833602C6-30F9-4844-ADCF-1118A7C1BE54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F17F607E-75E4-4B5F-B94B-893FBF8D061A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F17F607E-75E4-4B5F-B94B-893FBF8D061A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F17F607E-75E4-4B5F-B94B-893FBF8D061A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F17F607E-75E4-4B5F-B94B-893FBF8D061A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
