@@ -8,14 +8,10 @@ namespace swi
     {
         static void Main(string[] args)
         {
-            var service = new OutputService();
-            //service.SaveToFile(service.ReshapeData());
-            foreach (var record in service.ReshapeData())
-            {
-                Console.WriteLine($"{record}");
-            }
-
-            Console.ReadKey();
+            var outputDataService = new OutputDataService();
+            var fileService = new FileService();
+            var recordsFromFile = fileService.ReadRecords();
+            fileService.SaveToFile(outputDataService.ReshapeData(recordsFromFile));
         }
     }
 }

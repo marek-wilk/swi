@@ -8,20 +8,27 @@ using System.Linq;
 
 namespace BLL
 {
-    public class InputReadingService
+    public class FileService
     {
+        private readonly string _path = $"{Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.Parent.FullName}";
         public List<InputRecord> ReadRecords()
         {
-            var returnedList = new List<InputRecord>();
-            //using (var reader = new StreamReader($"{Directory.GetCurrentDirectory()}\\input.csv"))
-            string path = $"{Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.Parent.FullName}\\input.csv";
-            using (var reader = new StreamReader(path))
+            List<InputRecord> readRecords;
+            using (var reader = new StreamReader($"{_path}\\input.csv"))
             using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             {
                 var records = csv.GetRecords<InputRecord>().ToList();
-                returnedList = records;
+                readRecords = records;
             }
-            return returnedList;
+            return readRecords;
+        }
+        public void SaveToFile(List<string> dataToSave)
+        {
+            using StreamWriter file = new StreamWriter($"{_path}\\output.csv");
+            foreach (string data in dataToSave)
+            {
+                file.WriteLineAsync(data);
+            }
         }
     }
 }

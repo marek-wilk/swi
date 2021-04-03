@@ -7,7 +7,7 @@ namespace BLL.Data
         public DateTime Date { get; set; }
         public TimeSpan WorkTime { get; set; }
         public WorkTimeClassifier Classification { get; set; }
-        //I will use friday as last day of week by default
+        //Friday will be the last day of week by default
         public bool IsLastDayOfWeek { get; set; }
         //only used when IsLastDayOfWeek = true
         public TimeSpan WeeklyWorkTime { get; set; }
