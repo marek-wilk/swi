@@ -1,6 +1,4 @@
-﻿using System;
-using BLL;
-using CsvHelper.Expressions;
+﻿using BLL;
 
 namespace swi
 {
@@ -11,6 +9,10 @@ namespace swi
             var outputDataService = new OutputDataService();
             var fileService = new FileService();
             var recordsFromFile = fileService.ReadRecords();
+            if (recordsFromFile == null)
+            {
+                return;
+            }
             fileService.SaveToFile(outputDataService.ReshapeData(recordsFromFile));
         }
     }
