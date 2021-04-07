@@ -1,9 +1,9 @@
 ﻿using BLL.Data;
+using BLL.Data.Enum;
 using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using BLL.Data.Enum;
 
 namespace BLL
 {
@@ -42,7 +42,6 @@ namespace BLL
             Log.Logger.Information(MessagesDictionary.Informations[LogInformation.Analyzed]);
             return results;
         }
-
         /// <summary>
         /// Calculates daily work time.
         /// </summary>
@@ -52,7 +51,6 @@ namespace BLL
         {
             return workDayRecords.Last().Date - workDayRecords.First().Date;
         }
-
         /// <summary>
         /// Decides whether our daily worktime is inconclusive, was done on weekend, was overtime or undertime.
         /// </summary>
@@ -93,7 +91,6 @@ namespace BLL
             summarizedDay.WorkTime = CalculateWorkTime(workDayRecords);
             summarizedDay.Classification = ClassifyWorkTime(workDayRecords, summarizedDay.WorkTime);
             summarizedDay.IsLastDayOfWeek = workDayRecords.Key.DayOfWeek == DayOfWeek.Friday;
-
             return summarizedDay;
         }
     }
