@@ -15,7 +15,7 @@ namespace BLL
         private readonly TimeSpan _overtime = new TimeSpan(9, 0, 0);
         private readonly TimeSpan _undertime = new TimeSpan(6, 0, 0);
         /// <summary>
-        /// Groups records by date then call other functions to calculate work time, classify it and return data in Result class.
+        /// Groups records by date then call other functions to calculate work time, classify it and return data in List.
         /// </summary>
         /// <param name="records"></param>
         /// <returns></returns>
@@ -84,7 +84,7 @@ namespace BLL
         }
 
         /// <summary>
-        /// Gathers data from one day in Result class.
+        /// Gathers data from records from one day in Result class.
         /// </summary>
         /// <param name="workDayRecords"></param>
         /// <returns></returns>

@@ -10,7 +10,7 @@ namespace BLL
         private readonly string _shaping = "Changing data to saveable, demanded format";
         private readonly string _shaped = "Data successfully changed";
         /// <summary>
-        /// Extracts data from Result class and makes it into string so it can be saved in txt file
+        /// Extracts data from Result class and shapes it into string so it can be saved in demanded format in file.
         /// </summary>
         /// <param name="records"></param>
         /// <returns></returns>
