@@ -1,4 +1,5 @@
 ﻿using BLL;
+using Serilog;
 
 namespace swi
 {
@@ -6,7 +7,11 @@ namespace swi
     {
         static void Main(string[] args)
         {
-            var outputDataService = new OutputDataService();
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Information()
+                .WriteTo.Console()
+                .CreateLogger();
+            var outputDataService = new ResultDataService();
             var fileService = new FileService();
             var recordsFromFile = fileService.ReadRecords();
             if (recordsFromFile == null)
