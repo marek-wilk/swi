@@ -1,4 +1,5 @@
 ﻿using BLL.Data;
+using BLL.Data.Enum;
 using CsvHelper;
 using CsvHelper.TypeConversion;
 using Serilog;
@@ -7,7 +8,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using BLL.Data.Enum;
 
 namespace BLL
 {
@@ -30,23 +30,23 @@ namespace BLL
             }
             catch (FileNotFoundException e)
             {
-                Log.Logger.Error(e.Message);
+                Log.Logger.Error($"{MessagesDictionary.Errors[LogError.FileNotFound]}{_path}");
             }
             catch (HeaderValidationException e)
             {
-                Log.Logger.Error(e.Message);
+                Log.Logger.Error($"{MessagesDictionary.Errors[LogError.HeaderValidationException]}\n{e.Message}");
             }
             catch (ReaderException e)
             {
-                Log.Logger.Error(e.Message);
+                Log.Logger.Error($"{MessagesDictionary.Errors[LogError.ReaderException]}\n{e.Message}");
             }
             catch (TypeConverterException e)
             {
-                Log.Logger.Error(e.Message);
+                Log.Logger.Error($"{MessagesDictionary.Errors[LogError.TypeConverterException]}\n{e.Message}");
             }
             catch (Exception e)
             {
-                Log.Logger.Error(e.Message);
+                Log.Logger.Error($"{MessagesDictionary.Errors[LogError.Exception]}\n{e.Message}");
             }
             return readRecords;
         }

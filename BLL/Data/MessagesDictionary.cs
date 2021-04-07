@@ -16,5 +16,14 @@ namespace BLL.Data
             {LogInformation.Saving, "Saving results to file."},
             {LogInformation.Saved, "Saving complete. File 'result' can be found here "}
         };
+
+        public static Dictionary<LogError, string> Errors = new Dictionary<LogError, string>()
+        {
+            {LogError.FileNotFound, "File couldn't be found in designated path."},
+            {LogError.HeaderValidationException, "Headers in file don't match properties' names. Try fixing it."},
+            {LogError.ReaderException, "Data type doesn't match property type."},
+            {LogError.TypeConverterException, "Cannot convert data type from file to the one designated in class."},
+            {LogError.Exception, "Something went wrong."}
+        };
     }
 }
