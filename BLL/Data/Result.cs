@@ -2,7 +2,7 @@
 
 namespace BLL.Data
 {
-    public class OutputRecord
+    public class Result
     {
         public DateTime Date { get; set; }
         public TimeSpan WorkTime { get; set; }

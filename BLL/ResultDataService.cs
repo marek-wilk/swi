@@ -1,15 +1,24 @@
 ﻿using BLL.Data;
+using Serilog;
 using System;
 using System.Collections.Generic;
 
 namespace BLL
 {
-    public class OutputDataService
+    public class ResultDataService
     {
+        private readonly string _shaping = "Changing data to saveable, demanded format";
+        private readonly string _shaped = "Data successfully changed";
+        /// <summary>
+        /// Extracts data from Result class and shapes it into string so it can be saved in demanded format in file.
+        /// </summary>
+        /// <param name="records"></param>
+        /// <returns></returns>
         public List<string> ReshapeData(List<InputRecord> records)
         {
             var reshapedDataList = new List<string>();
             var analyzedRecords = new WorkTimeCalculator().AnalyzeRecords(records);
+            Log.Logger.Information(_shaping);
             foreach (var record in analyzedRecords)
             {
                 var data = $"Day {record.Date.ToString("yyyy-MM-dd")} " +
@@ -18,9 +27,10 @@ namespace BLL
                            $"{AddWeeklyHours(record)}";
                 reshapedDataList.Add(data);
             }
+            Log.Logger.Information(_shaped);
             return reshapedDataList;
         }
-        public string AddWorkTimeClassification(OutputRecord record)
+        private string AddWorkTimeClassification(Result record)
         {
             string classification = String.Empty;
             switch (record.Classification)
@@ -40,7 +50,7 @@ namespace BLL
             }
             return classification;
         }
-        public string AddWeeklyHours(OutputRecord record)
+        private string AddWeeklyHours(Result record)
         {
             string hours = String.Empty;
             if (record.IsLastDayOfWeek)

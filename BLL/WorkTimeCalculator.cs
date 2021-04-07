@@ -1,4 +1,5 @@
 ﻿using BLL.Data;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,43 +8,62 @@ namespace BLL
 {
     public class WorkTimeCalculator
     {
-        private const string EXIT = "exit";
+        private readonly string _analyzedRecord = "Getting results. Result no. ";
+        private readonly string _analyzingFinished = "Analyzing finished, got all results.";
         private readonly TimeSpan _standardWeeklyWorkTime = new TimeSpan(40, 0, 0);
         private readonly TimeSpan _overtime = new TimeSpan(9, 0, 0);
         private readonly TimeSpan _undertime = new TimeSpan(6, 0, 0);
-        public List<OutputRecord> AnalyzeRecords(List<InputRecord> records)
+        /// <summary>
+        /// Groups records by date then call other functions to calculate work time, classify it and return data in List.
+        /// </summary>
+        /// <param name="records"></param>
+        /// <returns></returns>
+        public List<Result> AnalyzeRecords(List<InputRecord> records)
         {
-            var outputRecords = new List<OutputRecord>();
+            var results = new List<Result>();
             var weeklyWorkTime = new TimeSpan();
             var groupedRecords = records.GroupBy(x => x.Date.Date);
             foreach (var groupedRecord in groupedRecords)
             {
-                var analyzedRecord = SummarizeWorkDay(groupedRecord);
-                weeklyWorkTime += analyzedRecord.WorkTime;
+                var result = SummarizeWorkDay(groupedRecord);
+                weeklyWorkTime += result.WorkTime;
                 //To make sure Weekly Work Time will show even if last record is from the middle of the week
-                if (groupedRecords.Count() == outputRecords.Count() + 1)
+                if (groupedRecords.Count() == results.Count() + 1)
                 {
-                    analyzedRecord.IsLastDayOfWeek = true;
+                    result.IsLastDayOfWeek = true;
                 }
-                if(analyzedRecord.IsLastDayOfWeek)
+                if(result.IsLastDayOfWeek)
                 {
-                    analyzedRecord.WeeklyWorkTime = weeklyWorkTime;
-                    analyzedRecord.WeeklyDifference = weeklyWorkTime - _standardWeeklyWorkTime;
+                    result.WeeklyWorkTime = weeklyWorkTime;
+                    result.WeeklyDifference = weeklyWorkTime - _standardWeeklyWorkTime;
                 }
-                outputRecords.Add(analyzedRecord);
+                results.Add(result);
+                Log.Information($"{_analyzedRecord}{results.Count}");
             }
-            return outputRecords;
+            Log.Information($"{_analyzingFinished}");
+            return results;
         }
 
-        //
-        public TimeSpan CalculateWorkTime(IGrouping<DateTime, InputRecord> workDayRecords)
+        /// <summary>
+        /// Calculates daily work time.
+        /// </summary>
+        /// <param name="workDayRecords"></param>
+        /// <returns></returns>
+        private TimeSpan CalculateWorkTime(IGrouping<DateTime, InputRecord> workDayRecords)
         {
             return workDayRecords.Last().Date - workDayRecords.First().Date;
         }
-        public WorkTimeClassifier ClassifyWorkTime(IGrouping<DateTime,InputRecord> workDayRecords, TimeSpan workTime)
+
+        /// <summary>
+        /// Decides whether our daily worktime is inconclusive, was done on weekend, was overtime or undertime.
+        /// </summary>
+        /// <param name="workDayRecords"></param>
+        /// <param name="workTime"></param>
+        /// <returns></returns>
+        private WorkTimeClassifier ClassifyWorkTime(IGrouping<DateTime,InputRecord> workDayRecords, TimeSpan workTime)
         {
             
-            if(!workDayRecords.Last().Event.Contains(EXIT))
+            if(workDayRecords.Last().Event)
             {
                 return WorkTimeClassifier.Inconclusive;
             }
@@ -62,9 +82,14 @@ namespace BLL
             return WorkTimeClassifier.Normal;
         }
 
-        public OutputRecord SummarizeWorkDay(IGrouping<DateTime, InputRecord> workDayRecords)
+        /// <summary>
+        /// Gathers data from records from one day in Result class.
+        /// </summary>
+        /// <param name="workDayRecords"></param>
+        /// <returns></returns>
+        private Result SummarizeWorkDay(IGrouping<DateTime, InputRecord> workDayRecords)
         {
-            var summarizedDay = new OutputRecord();
+            var summarizedDay = new Result();
             summarizedDay.Date = workDayRecords.Key;
             summarizedDay.WorkTime = CalculateWorkTime(workDayRecords);
             summarizedDay.Classification = ClassifyWorkTime(workDayRecords, summarizedDay.WorkTime);
