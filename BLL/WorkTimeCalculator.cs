@@ -8,7 +8,6 @@ namespace BLL
 {
     public class WorkTimeCalculator
     {
-        private readonly string _exit = "exit";
         private readonly string _analyzedRecord = "Getting results. Result no. ";
         private readonly string _analyzingFinished = "Analyzing finished, got all results.";
         private readonly TimeSpan _standardWeeklyWorkTime = new TimeSpan(40, 0, 0);
@@ -64,7 +63,7 @@ namespace BLL
         private WorkTimeClassifier ClassifyWorkTime(IGrouping<DateTime,InputRecord> workDayRecords, TimeSpan workTime)
         {
             
-            if(!workDayRecords.Last().Event.Contains(_exit))
+            if(workDayRecords.Last().Event)
             {
                 return WorkTimeClassifier.Inconclusive;
             }

@@ -1,5 +1,6 @@
 ﻿using BLL.Data;
 using CsvHelper;
+using CsvHelper.TypeConversion;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -40,12 +41,24 @@ namespace BLL
             {
                 Log.Logger.Error(e.Message);
             }
+            catch (TypeConverterException e)
+            {
+                Log.Logger.Error(e.Message);
+            }
+            catch (Exception e)
+            {
+                Log.Logger.Error(e.Message);
+            }
             return readRecords;
         }
         public void SaveToFile(List<string> dataToSave)
         {
             using StreamWriter file = new StreamWriter($"{_path}\\result");
             Log.Logger.Information(_saving);
+            foreach (var data in dataToSave)
+            {
+                Console.WriteLine($"{data}");
+            }
             foreach (string data in dataToSave)
             {
                 file.WriteLineAsync(data);
