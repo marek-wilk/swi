@@ -16,9 +16,9 @@ namespace BLL
         /// <returns></returns>
         public List<string> ReshapeData(List<InputRecord> records)
         {
-            Log.Logger.Information(_shaping);
             var reshapedDataList = new List<string>();
             var analyzedRecords = new WorkTimeCalculator().AnalyzeRecords(records);
+            Log.Logger.Information(_shaping);
             foreach (var record in analyzedRecords)
             {
                 var data = $"Day {record.Date.ToString("yyyy-MM-dd")} " +
