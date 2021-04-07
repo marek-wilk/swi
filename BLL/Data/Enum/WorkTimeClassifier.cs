@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BLL.Data
+﻿namespace BLL.Data.Enum
 {
     public enum WorkTimeClassifier
     {

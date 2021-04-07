@@ -1,4 +1,5 @@
 ﻿using BLL.Data;
+using BLL.Data.Enum;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -7,8 +8,6 @@ namespace BLL
 {
     public class ResultDataService
     {
-        private readonly string _shaping = "Changing data to saveable, demanded format";
-        private readonly string _shaped = "Data successfully changed";
         /// <summary>
         /// Extracts data from Result class and shapes it into string so it can be saved in demanded format in file.
         /// </summary>
@@ -18,7 +17,7 @@ namespace BLL
         {
             var reshapedDataList = new List<string>();
             var analyzedRecords = new WorkTimeCalculator().AnalyzeRecords(records);
-            Log.Logger.Information(_shaping);
+            Log.Logger.Information(MessagesDictionary.Informations[LogInformation.Shaping]);
             foreach (var record in analyzedRecords)
             {
                 var data = $"Day {record.Date.ToString("yyyy-MM-dd")} " +
@@ -27,7 +26,7 @@ namespace BLL
                            $"{AddWeeklyHours(record)}";
                 reshapedDataList.Add(data);
             }
-            Log.Logger.Information(_shaped);
+            Log.Logger.Information(MessagesDictionary.Informations[LogInformation.Shaped]);
             return reshapedDataList;
         }
         private string AddWorkTimeClassification(Result record)
@@ -35,16 +34,16 @@ namespace BLL
             string classification = String.Empty;
             switch (record.Classification)
             {
-                case Data.WorkTimeClassifier.Inconclusive:
+                case WorkTimeClassifier.Inconclusive:
                     classification = "i ";
                     break;
-                case Data.WorkTimeClassifier.Overtime:
+                case WorkTimeClassifier.Overtime:
                     classification = "ot ";
                     break;
-                case Data.WorkTimeClassifier.Undertime:
+                case WorkTimeClassifier.Undertime:
                     classification = "ut ";
                     break;
-                case Data.WorkTimeClassifier.Weekend:
+                case WorkTimeClassifier.Weekend:
                     classification = "w ";
                     break;
             }
@@ -55,7 +54,7 @@ namespace BLL
             string hours = String.Empty;
             if (record.IsLastDayOfWeek)
             {
-                hours = $"{Math.Floor(record.WeeklyWorkTime.TotalHours)}:{record.WeeklyWorkTime.Minutes} {record.WeeklyDifference}";
+                hours = $"{Math.Floor(record.WeeklyWorkTime.TotalHours)}:{record.WeeklyWorkTime.Minutes}:{record.WeeklyWorkTime.Seconds} {record.WeeklyDifference}";
             }
             return hours;
         }

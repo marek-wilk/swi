@@ -3,13 +3,12 @@ using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BLL.Data.Enum;
 
 namespace BLL
 {
     public class WorkTimeCalculator
     {
-        private readonly string _analyzedRecord = "Getting results. Result no. ";
-        private readonly string _analyzingFinished = "Analyzing finished, got all results.";
         private readonly TimeSpan _standardWeeklyWorkTime = new TimeSpan(40, 0, 0);
         private readonly TimeSpan _overtime = new TimeSpan(9, 0, 0);
         private readonly TimeSpan _undertime = new TimeSpan(6, 0, 0);
@@ -38,9 +37,9 @@ namespace BLL
                     result.WeeklyDifference = weeklyWorkTime - _standardWeeklyWorkTime;
                 }
                 results.Add(result);
-                Log.Information($"{_analyzedRecord}{results.Count}");
+                Log.Logger.Information($"{MessagesDictionary.Informations[LogInformation.Analyzing]}{results.Count}");
             }
-            Log.Information($"{_analyzingFinished}");
+            Log.Logger.Information(MessagesDictionary.Informations[LogInformation.Analyzed]);
             return results;
         }
 

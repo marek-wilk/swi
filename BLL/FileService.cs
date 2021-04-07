@@ -7,15 +7,13 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using BLL.Data.Enum;
 
 namespace BLL
 {
     public class FileService
     {
         private readonly string _path = $"{Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.Parent.FullName}";
-        private readonly string _saving = "Saving results to file.";
-        private readonly string _saved = "Saving complete. File result can be found here ";
-        private readonly string _reading = "Reading from file.";
         public List<InputRecord> ReadRecords()
         {
             List<InputRecord> readRecords = null;
@@ -24,10 +22,11 @@ namespace BLL
                 using (var reader = new StreamReader($"{_path}\\input.csv"))
                 using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
                 {
-                    Log.Logger.Information(_reading);
+                    Log.Logger.Information(MessagesDictionary.Informations[LogInformation.Reading]);
                     var records = csv.GetRecords<InputRecord>().ToList();
                     readRecords = records;
                 }
+                Log.Logger.Information(MessagesDictionary.Informations[LogInformation.Read]);
             }
             catch (FileNotFoundException e)
             {
@@ -54,7 +53,7 @@ namespace BLL
         public void SaveToFile(List<string> dataToSave)
         {
             using StreamWriter file = new StreamWriter($"{_path}\\result");
-            Log.Logger.Information(_saving);
+            Log.Logger.Information(MessagesDictionary.Informations[LogInformation.Saving]);
             foreach (var data in dataToSave)
             {
                 Console.WriteLine($"{data}");
@@ -63,7 +62,7 @@ namespace BLL
             {
                 file.WriteLineAsync(data);
             }
-            Log.Logger.Information($"{_saved}{_path}");
+            Log.Logger.Information($"{MessagesDictionary.Informations[LogInformation.Saved]}{_path}");
         }
     }
 }

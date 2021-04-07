@@ -1,4 +1,5 @@
 ﻿using System;
+using BLL.Data.Enum;
 
 namespace BLL.Data
 {
