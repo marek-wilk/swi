@@ -1,7 +1,8 @@
 ﻿namespace BLL.Data.Enum
 {
-    enum LogInformation
+    public enum LogInformation
     {
+        Started,
         Reading,
         Read,
         Analyzing,
@@ -9,6 +10,7 @@
         Shaping,
         Shaped,
         Saving,
-        Saved
+        Saved,
+        Finished
     }
 }

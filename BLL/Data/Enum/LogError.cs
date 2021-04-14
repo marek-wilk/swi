@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BLL.Data.Enum
+﻿namespace BLL.Data.Enum
 {
-    enum LogError
+    public enum LogError
     {
         FileNotFound,
         HeaderValidationException,

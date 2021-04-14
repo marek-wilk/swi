@@ -1,17 +1,24 @@
 ﻿using BLL.Data;
 using BLL.Data.Enum;
-using Serilog;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace BLL
+namespace BLL.Services
 {
-    public class WorkTimeCalculator
+    public class WorkTimeCalculator : IWorkTimeCalculator
     {
-        private readonly TimeSpan _standardWeeklyWorkTime = new TimeSpan(40, 0, 0);
-        private readonly TimeSpan _overtime = new TimeSpan(9, 0, 0);
-        private readonly TimeSpan _undertime = new TimeSpan(6, 0, 0);
+        private readonly ILogger<WorkTimeCalculator> _log;
+        private readonly IConfiguration _config;
+
+        public WorkTimeCalculator(ILogger<WorkTimeCalculator> log, IConfiguration config)
+        {
+            _log = log;
+            _config = config;
+        }
+
         /// <summary>
         /// Groups records by date then call other functions to calculate work time, classify it and return data in List.
         /// </summary>
@@ -27,19 +34,19 @@ namespace BLL
                 var result = SummarizeWorkDay(groupedRecord);
                 weeklyWorkTime += result.WorkTime;
                 //To make sure Weekly Work Time will show even if last record is from the middle of the week
-                if (groupedRecords.Count() == results.Count() + 1)
+                if (groupedRecords.Count() == results.Count() + _config.GetValue<int>("One"))
                 {
                     result.IsLastDayOfWeek = true;
                 }
                 if(result.IsLastDayOfWeek)
                 {
                     result.WeeklyWorkTime = weeklyWorkTime;
-                    result.WeeklyDifference = weeklyWorkTime - _standardWeeklyWorkTime;
+                    result.WeeklyDifference = weeklyWorkTime - _config.GetValue<TimeSpan>("StandardWeeklyWorkTime");
                 }
                 results.Add(result);
-                Log.Logger.Information($"{MessagesDictionary.Informations[LogInformation.Analyzing]}{results.Count}");
+                _log.LogInformation($"{MessagesDictionary.Informations[LogInformation.Analyzing]}{results.Count}");
             }
-            Log.Logger.Information(MessagesDictionary.Informations[LogInformation.Analyzed]);
+            _log.LogInformation(MessagesDictionary.Informations[LogInformation.Analyzed]);
             return results;
         }
         /// <summary>
@@ -47,7 +54,7 @@ namespace BLL
         /// </summary>
         /// <param name="workDayRecords"></param>
         /// <returns></returns>
-        private TimeSpan CalculateWorkTime(IGrouping<DateTime, InputRecord> workDayRecords)
+        public TimeSpan CalculateWorkTime(IGrouping<DateTime, InputRecord> workDayRecords)
         {
             return workDayRecords.Last().Date - workDayRecords.First().Date;
         }
@@ -57,7 +64,7 @@ namespace BLL
         /// <param name="workDayRecords"></param>
         /// <param name="workTime"></param>
         /// <returns></returns>
-        private WorkTimeClassifier ClassifyWorkTime(IGrouping<DateTime,InputRecord> workDayRecords, TimeSpan workTime)
+        public WorkTimeClassifier ClassifyWorkTime(IGrouping<DateTime,InputRecord> workDayRecords, TimeSpan workTime)
         {
             
             if(workDayRecords.Last().Event)
@@ -68,23 +75,22 @@ namespace BLL
             {
                 return WorkTimeClassifier.Weekend;
             }
-            if(workTime > _overtime)
+            if(workTime > _config.GetSection("Overtime").GetValue<TimeSpan>("timespan"))
             {
                 return WorkTimeClassifier.Overtime;
             }
-            if(workTime < _undertime)
+            if(workTime < _config.GetSection("Undertime").GetValue<TimeSpan>("timespan"))
             {
                 return WorkTimeClassifier.Undertime;
             }
             return WorkTimeClassifier.Normal;
         }
-
         /// <summary>
         /// Gathers data from records from one day in Result class.
         /// </summary>
         /// <param name="workDayRecords"></param>
         /// <returns></returns>
-        private Result SummarizeWorkDay(IGrouping<DateTime, InputRecord> workDayRecords)
+        public Result SummarizeWorkDay(IGrouping<DateTime, InputRecord> workDayRecords)
         {
             var summarizedDay = new Result();
             summarizedDay.Date = workDayRecords.Key;

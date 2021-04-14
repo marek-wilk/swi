@@ -1,9 +1,12 @@
-﻿using System;
-using System.IO;
-using BLL;
+﻿using BLL.Data;
+using BLL.Data.Enum;
+using BLL.Services;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using System;
+using System.IO;
 
 namespace swi
 {
@@ -15,24 +18,32 @@ namespace swi
             BuildConfig(builder);
 
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Information()
+                .ReadFrom.Configuration(builder.Build())
+                .Enrich.FromLogContext()
                 .WriteTo.Console()
                 .CreateLogger();
+
+            Log.Logger.Information(MessagesDictionary.Informations[LogInformation.Started]);
 
             var host = Host.CreateDefaultBuilder()
                 .ConfigureServices((context, services) =>
                 {
-
+                    services.AddTransient<IFileService, FileService>();
+                    services.AddTransient<IWorkTimeCalculator, WorkTimeCalculator>();
+                    services.AddTransient<IResultDataService, ResultDataService>();
                 })
+                .UseSerilog()
                 .Build();
-            var outputDataService = new ResultDataService();
-            var fileService = new FileService();
+            var fileService = ActivatorUtilities.CreateInstance<FileService>(host.Services);
+            var resultDataService = ActivatorUtilities.CreateInstance<ResultDataService>(host.Services);
             var recordsFromFile = fileService.ReadRecords();
             if (recordsFromFile == null)
             {
                 return;
             }
-            fileService.SaveToFile(outputDataService.ReshapeData(recordsFromFile));
+            fileService.SaveToFile(resultDataService.ReshapeData(recordsFromFile));
+
+            Log.Logger.Information(MessagesDictionary.Informations[LogInformation.Finished]);
         }
 
         static void BuildConfig(IConfigurationBuilder builder)

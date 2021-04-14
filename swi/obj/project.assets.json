@@ -1169,6 +1169,9 @@
         "framework": ".NETCoreApp,Version=v3.1",
         "dependencies": {
           "CsvHelper": "26.1.0",
+          "Microsoft.Extensions.Configuration.Abstractions": "5.0.0",
+          "Microsoft.Extensions.Configuration.Binder": "5.0.0",
+          "Microsoft.Extensions.Logging": "5.0.0",
           "Serilog": "2.10.0",
           "Serilog.Sinks.Console": "3.1.1"
         },
