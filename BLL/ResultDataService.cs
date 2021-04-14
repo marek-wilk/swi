@@ -51,7 +51,7 @@ namespace BLL
         }
         private string AddWeeklyHours(Result record)
         {
-            string hours = String.Empty;
+            string hours = string.Empty;
             if (record.IsLastDayOfWeek)
             {
                 hours = $"{Math.Floor(record.WeeklyWorkTime.TotalHours)}:{record.WeeklyWorkTime.Minutes}:{record.WeeklyWorkTime.Seconds} {record.WeeklyDifference}";

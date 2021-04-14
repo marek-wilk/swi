@@ -54,13 +54,10 @@ namespace BLL
         {
             using StreamWriter file = new StreamWriter($"{_path}\\result");
             Log.Logger.Information(MessagesDictionary.Informations[LogInformation.Saving]);
-            foreach (var data in dataToSave)
-            {
-                Console.WriteLine($"{data}");
-            }
             foreach (string data in dataToSave)
             {
-                file.WriteLineAsync(data);
+                Console.WriteLine($"{data}");
+                file.WriteLine(data);
             }
             Log.Logger.Information($"{MessagesDictionary.Informations[LogInformation.Saved]}{_path}");
         }
