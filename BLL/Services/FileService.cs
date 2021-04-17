@@ -16,7 +16,6 @@ namespace BLL.Services
     {
         private readonly ILogger<FileService> _log;
         private readonly IConfiguration _config;
-        private readonly string _path = $"{Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.Parent.FullName}";
 
         public FileService(ILogger<FileService> log, IConfiguration config)
         {
@@ -28,12 +27,12 @@ namespace BLL.Services
         /// Reads records from provided input.csv file
         /// </summary>
         /// <returns></returns>
-        public List<InputRecord> ReadRecords()
+        public List<InputRecord> ReadRecords(string path)
         {
             List<InputRecord> readRecords = null;
             try
             {
-                using (var reader = new StreamReader($"{_path}\\{_config.GetValue<string>("ProvidedFile")}"))
+                using (var reader = new StreamReader($"{path}\\{_config.GetValue<string>("ProvidedFile")}"))
                 using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
                 {
                     _log.LogInformation(MessagesDictionary.Informations[LogInformation.Reading]);
@@ -42,9 +41,9 @@ namespace BLL.Services
                 }
                 _log.LogInformation(MessagesDictionary.Informations[LogInformation.Read]);
             }
-            catch (FileNotFoundException e)
+            catch (FileNotFoundException)
             {
-                _log.LogError($"{MessagesDictionary.Errors[LogError.FileNotFound]}{_path}");
+                _log.LogError($"{MessagesDictionary.Errors[LogError.FileNotFound]}{path}");
             }
             catch (HeaderValidationException e)
             {
@@ -68,16 +67,21 @@ namespace BLL.Services
         /// Saves provided data to result file
         /// </summary>
         /// <param name="dataToSave"></param>
-        public void SaveToFile(List<string> dataToSave)
+        public void SaveToFile(List<string> dataToSave, string path)
         {
-            using StreamWriter file = new StreamWriter($"{_path}\\{_config.GetValue<string>("ResultingFile")}");
+            using StreamWriter file = new StreamWriter($"{path}\\{_config.GetValue<string>("ResultingFile")}");
             _log.LogInformation(MessagesDictionary.Informations[LogInformation.Saving]);
             foreach (string data in dataToSave)
             {
                 Console.WriteLine($"{data}");
                 file.WriteLine(data);
             }
-            _log.LogInformation($"{MessagesDictionary.Informations[LogInformation.Saved]}{_path}");
+            _log.LogInformation($"{MessagesDictionary.Informations[LogInformation.Saved]}{path}");
+        }
+
+        public string GetPath()
+        {
+            return $"{Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.Parent.FullName}";
         }
     }
 }
