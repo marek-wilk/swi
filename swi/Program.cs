@@ -36,12 +36,13 @@ namespace swi
                 .Build();
             var fileService = ActivatorUtilities.CreateInstance<FileService>(host.Services);
             var resultDataService = ActivatorUtilities.CreateInstance<ResultDataService>(host.Services);
-            var recordsFromFile = fileService.ReadRecords();
+            var path = fileService.GetPath();
+            var recordsFromFile = fileService.ReadRecords(path);
             if (recordsFromFile == null)
             {
                 return;
             }
-            fileService.SaveToFile(resultDataService.ReshapeData(recordsFromFile));
+            fileService.SaveToFile(resultDataService.ReshapeData(recordsFromFile), path);
 
             Log.Logger.Information(MessagesDictionary.Informations[LogInformation.Finished]);
         }
