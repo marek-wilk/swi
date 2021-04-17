@@ -40,11 +40,13 @@ namespace swi
             var recordsFromFile = fileService.ReadRecords(path);
             if (recordsFromFile == null)
             {
+                Console.ReadKey();
                 return;
             }
             fileService.SaveToFile(resultDataService.ReshapeData(recordsFromFile), path);
 
             Log.Logger.Information(MessagesDictionary.Informations[LogInformation.Finished]);
+            Console.ReadKey();
         }
 
         static void BuildConfig(IConfigurationBuilder builder)

@@ -81,7 +81,7 @@ namespace BLL.Services
 
         public string GetPath()
         {
-            return $"{Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.Parent.FullName}";
+            return $"{Directory.GetCurrentDirectory()}";
         }
     }
 }
